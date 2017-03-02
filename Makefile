@@ -21,17 +21,21 @@ include $(BASE)/src/isp.mk
 localconfig: xml/billmgr_mod_$(PM_NAME).xml dist/etc/$(SHORT_NAME)_domainprice.json dist/etc/$(SHORT_NAME)_countries.json pkgs/rpm/specs/billmanager-plugin-$(PM_NAME).spec.in
 
 xml/billmgr_mod_$(PM_NAME).xml: billmgr_mod.xml config.mk
+	mkdir -p xml/
 	rm -f xml/billmgr_mod_* || true
 	sed -e "s|__PM_NAME__|$(PM_NAME)|g" -e "s|__FULL_NAME__|$(FULL_NAME)|g" billmgr_mod.xml > xml/billmgr_mod_$(PM_NAME).xml
 
 dist/etc/$(SHORT_NAME)_domainprice.json: config.mk
+	mkdir -p dist/etc/
 	rm -f dist/etc/*_domainprice.json || true
 	wget -O dist/etc/$(SHORT_NAME)_domainprice.json "$(DOMAINPRICE_URL)"
 
 dist/etc/$(SHORT_NAME)_countries.json: config.mk
+	mkdir -p dist/etc/
 	rm -f dist/etc/*_countries.json || true
 	wget -O dist/etc/$(SHORT_NAME)_countries.json "$(COUNTRIES_URL)"
 
 pkgs/rpm/specs/billmanager-plugin-$(PM_NAME).spec.in: config.mk rpm_spec.spec
+	mkdir -p pkgs/rpm/specs/
 	rm -f pkgs/rpm/specs/* || true
 	sed -e "s|__PM_NAME__|$(PM_NAME)|g" -e "s|__SHORT_NAME__|$(SHORT_NAME)|g" -e "s|__RUTLD_PROD_URL__|$(RUTLD_PROD_URL)|g" rpm_spec.spec > pkgs/rpm/specs/billmanager-plugin-$(PM_NAME).spec.in
