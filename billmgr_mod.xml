@@ -76,9 +76,6 @@
   <metadata name="processing.edit.__PM_NAME__" type="form">
     <form title="name">
       <page name="connect">
-        <field name="url">
-          <input type="text" name="url" required="yes" check="url"/>
-        </field>
         <field name="username">
           <input type="text" name="username" required="yes"/>
         </field>

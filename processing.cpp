@@ -703,10 +703,12 @@ class CLASS_NAME : public Registrator {
 
   int ImportRemoteContact(int module, const string& remote_id) {
     auto remote = Remote_MakeRequest(
-        {{"func", "domaincontact.edit"}, {"elid", remote_id}});
+        {{"func", "domaincontact.edit"}, {"elid", remote_id}, {"api", "on"}});
     StringMap local {{"type", "owner"}, {"sok", "ok"}, {"module", str::Str(module)}};
     auto copy = [&remote, &local](const string& dst, const string& src = "") {
-      local[dst] = remote.value(!dst.empty() ? dst : src);
+//	  string src0 = !src.empty() ? src : dst;
+//	  Warning("Copy %s<-%s %s", dst.c_str(), src0.c_str(), remote.value(src0).c_str());
+      local[dst] = remote.value(!src.empty() ? src : dst);
     };
 
     string remote_type = remote.value("ctype");
@@ -746,9 +748,10 @@ class CLASS_NAME : public Registrator {
         copy("inn");
       }
       copy("birthdate");
-      copy("passport_series", "passport");
+      copy("passport", "passport_series");
       copy("passport_org");
       copy("passport_date");
+	  local["name"] = "Imported " + remote_id + " (" + local["firstname_locale"] + " " + local["lastname_locale"] + ")";
     } else if (remote_type == "company") {
       copy("company");
       copy("company_locale", "company_ru");
@@ -756,6 +759,7 @@ class CLASS_NAME : public Registrator {
       copy("kpp");
       copy("ogrn");
       local["profiletype"] = str::Str(table::Profile::prCompany);
+	  local["name"] = "Imported " + remote_id + " (" + local["company_locale"] + ")";
     } else if (remote_type == "generic") {
       if (remote.value("company") == "" || remote.value("company") == "N/A") {
         local["profiletype"] = str::Str(table::Profile::prPersonal);
@@ -765,6 +769,7 @@ class CLASS_NAME : public Registrator {
       }
       copy("firstname");
       copy("lastname");
+	  local["name"] = "Imported " + remote_id + " (" + local["firstname"] + " " + local["lastname"] + ")";
     }
     int local_id = str::Int(sbin::ClientQuery("processing.import.profile", local).value("profile_id"));
     SetRemoteContactId(local_id, module, remote_type == "generic", remote_id);
@@ -826,6 +831,7 @@ class CLASS_NAME : public Registrator {
                   {"ns2", domain_edit.value("ns2")},
                   {"ns3", domain_edit.value("ns3")},
                   {PARAM_REMOTE_ID, remote_id},
+				  {PARAM_REMOTE_PRICE, i.FindNode("price_id").Str()}
                   // TODO: add PARAM_REMOTE_PRICE
               })
               .value("service_id"));
