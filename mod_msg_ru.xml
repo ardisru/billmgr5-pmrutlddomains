@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+	<lang name="ru">
+    <messages name="plugin">
+      <msg name="desc_short___PM_NAME__">__FULL_NAME__</msg>
+      <msg name="desc_full___PM_NAME__">Интеграция с __FULL_NAME__</msg>
+	  <msg name="price___PM_NAME__">Бесплатно</msg>
+    </messages>
+    <messages name="processing.edit.__PM_NAME__">
+      <msg name="url">API URL</msg>
+      <msg name="hint_url">URL доступа к API</msg>
+      <msg name="username">Имя пользователя</msg>
+      <msg name="password">Пароль</msg>
+      <msg name="registrar">Регистратор</msg>
+      <msg name="registrar_0">По умолчанию</msg>
+    </messages>
+  </lang>
+</mgrdata>

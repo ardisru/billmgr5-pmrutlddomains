@@ -12,30 +12,46 @@ $(PM_NAME)_FOLDER = processing
 $(PM_NAME)_LDADD = -lmgr -lmgrdb
 $(PM_NAME)_DLIBS = processingmodule processingdomain
 
-PKGNAMES = billmanager-plugin-$(PM_NAME)
-RPM_PKGNAMES ?= $(PKGNAMES)
+DOMAINPRICE_JSON = etc/$(SHORT_NAME)_domainprice.json
+COUNTRIES_JSON = etc/$(SHORT_NAME)_countries.json
+JSON = $(DOMAINPRICE_JSON) $(COUNTRIES_JSON)
+DIST_XML = xml/$(PM_NAME).xml xml/$(PM_NAME)_msg_ru.xml xml/$(PM_NAME)_msg_en.xml
 
 BASE ?= /usr/local/mgr5
 include $(BASE)/src/isp.mk
 
-localconfig: xml/billmgr_mod_$(PM_NAME).xml dist/etc/$(SHORT_NAME)_domainprice.json dist/etc/$(SHORT_NAME)_countries.json pkgs/rpm/specs/billmanager-plugin-$(PM_NAME).spec.in
+.PHONY: install-json clean_json_xml dist_xml
+.SUFFIXES: .xml
 
-xml/billmgr_mod_$(PM_NAME).xml: billmgr_mod.xml config.mk
-	mkdir -p xml/
-	rm -f xml/billmgr_mod_* || true
-	sed -e "s|__PM_NAME__|$(PM_NAME)|g" -e "s|__FULL_NAME__|$(FULL_NAME)|g" billmgr_mod.xml > xml/billmgr_mod_$(PM_NAME).xml
+all: $(DIST_XML) $(JSON)
 
-dist/etc/$(SHORT_NAME)_domainprice.json: config.mk
-	mkdir -p dist/etc/
-	rm -f dist/etc/*_domainprice.json || true
-	wget -O dist/etc/$(SHORT_NAME)_domainprice.json "$(DOMAINPRICE_URL)"
+install: install-json
 
-dist/etc/$(SHORT_NAME)_countries.json: config.mk
-	mkdir -p dist/etc/
-	rm -f dist/etc/*_countries.json || true
-	wget -O dist/etc/$(SHORT_NAME)_countries.json "$(COUNTRIES_URL)"
+install-json: $(JSON)
+	install -o root -g root -m 440 $(JSON) $(BASE)/etc/
 
-pkgs/rpm/specs/billmanager-plugin-$(PM_NAME).spec.in: config.mk rpm_spec.spec
-	mkdir -p pkgs/rpm/specs/
-	rm -f pkgs/rpm/specs/* || true
-	sed -e "s|__PM_NAME__|$(PM_NAME)|g" -e "s|__SHORT_NAME__|$(SHORT_NAME)|g" -e "s|__RUTLD_PROD_URL__|$(RUTLD_PROD_URL)|g" rpm_spec.spec > pkgs/rpm/specs/billmanager-plugin-$(PM_NAME).spec.in
+xml-from-template: config.mk
+	mkdir -p "$(shell dirname $(DST))"
+	sed -e "s|__PM_NAME__|$(PM_NAME)|g" -e "s|__FULL_NAME__|$(FULL_NAME)|g" $(SRC) > $(DST)
+
+download-json: config.mk
+	mkdir -p "$(shell dirname $(FILE))"
+	wget -O "$(FILE)" "$(URL)"
+
+clean: clean_json_xml
+
+clean_json_xml:
+	$(RM) -r etc
+	$(RM) -r xml
+
+xml/$(PM_NAME).xml: mod.xml
+	$(MAKE) xml-from-template SRC="$<" DST="$@"
+
+xml/$(PM_NAME)%.xml: mod%.xml
+	$(MAKE) xml-from-template SRC="$<" DST="$@"
+
+$(DOMAINPRICE_JSON): config.mk
+	$(MAKE) download-json FILE="$@" URL="$(DOMAINPRICE_URL)"
+
+$(COUNTRIES_JSON): config.mk
+	$(MAKE) download-json FILE="$@" URL="$(COUNTRIES_URL)"

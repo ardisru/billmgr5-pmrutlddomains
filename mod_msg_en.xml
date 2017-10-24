@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+  <lang name="en">
+    <messages name="plugin">
+      <msg name="desc_short___PM_NAME__">__FULL_NAME__</msg>
+      <msg name="desc_full___PM_NAME__">__FULL_NAME__ integration </msg>
+	    <msg name="price___PM_NAME__">Free</msg>
+    </messages>
+    <messages name="processing.edit.__PM_NAME__">
+      <msg name="url">API URL</msg>
+      <msg name="hint_url">URL for API</msg>
+      <msg name="username">Username</msg>
+      <msg name="password">Password</msg>
+      <msg name="registrar">Registrar</msg>
+      <msg name="registrar_0">Default</msg>
+      <msg name="registrar_5">RUCENTER</msg>
+      <msg name="registrar_13">Ardis</msg>
+      <msg name="registrar_14">EvoNames</msg>
+      <msg name="registrar_15">R01</msg>
+      <msg name="registrar_16">WebNames</msg>
+      <msg name="registrar_17">RegRu</msg>
+      <msg name="registrar_18">NauNet</msg>
+      <msg name="registrar_19">Directi</msg>
+      <msg name="registrar_20">Mastername</msg>
+      <msg name="registrar_21">UkrNames</msg>
+      <msg name="registrar_22">RegRu</msg>
+      <msg name="registrar_23">WebNames</msg>
+      <msg name="registrar_24">Directi</msg>
+      <msg name="registrar_25">PrivateNames</msg>
+      <msg name="registrar_27">RUCENTER</msg>
+      <msg name="registrar_28">WebNames</msg>
+      <msg name="registrar_30">DomainReseller</msg>
+      <msg name="registrar_31">ActiveDomains</msg>
+    </messages>
+  </lang>
+</mgrdata>

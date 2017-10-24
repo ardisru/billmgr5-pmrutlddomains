@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+  <plugin name="__PM_NAME__">
+    <group>processing_module</group>
+    <author>__FULL_NAME__ team</author>
+    <params>
+      <type name="domain"/>
+    </params>
+  </plugin>
+
+  <metadata name="service_profile.__PM_NAME__" type="form">
+    <form>
+      <field name="middlename_locale">
+        <input type="text" name="middlename_locale" setvalues="yes" required="yes"/>
+      </field>
+    </form>
+  </metadata>
+
+  <metadata name="processing.edit.__PM_NAME__.createuser" type="form">
+    <form>
+     <page name="createuser">
+        <field name="link">
+          <link name="outerlink" target="_blank"/>
+        </field>
+      </page>
+    </form>
+  </metadata>
+
+  <metadata name="processing.edit.__PM_NAME__" type="form">
+    <form title="name">
+      <page name="connect">
+        <field name="username">
+          <input type="text" name="username" required="yes"/>
+        </field>
+        <field name="password">
+          <input type="password" name="password" required="yes"/>
+        </field>
+        <field name="registrar">
+          <select name="registrar" />
+        </field>
+      </page>
+    </form>
+  </metadata>
+</mgrdata>
