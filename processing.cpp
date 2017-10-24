@@ -6,6 +6,7 @@
 #include <processing/domain_common.h>
 #include <processing/processingmodule.h>
 #include <table/dbobject.h>
+#include "config.h"
 
 #include <fstream>
 

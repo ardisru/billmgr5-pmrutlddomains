@@ -1,0 +1,10 @@
+#ifndef ____CLASS_NAME____CONFIG_H__
+#define ____CLASS_NAME____CONFIG_H__
+
+#define BINARY_NAME "__BINARY_NAME__"
+#define SHORT_NAME "__SHORT_NAME__"
+#define RUTLD_PROD_URL "__RUTLD_PROD_URL__"
+#define RUTLD_PROJECT_NAME "__RUTLD_PROJECT_NAME__"
+#define CLASS_NAME __CLASS_NAME__
+
+#endif // ____CLASS_NAME____CONFIG_H__
