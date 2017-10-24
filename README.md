@@ -4,20 +4,13 @@
 
 ## Инструкции по установке для Centos 7
 
-Для установки модуля перейдите в директорию */usr/local/mgr5/src/* и выполните следующие команды от имени пользователя *root*:
+Перейдите в директорию */usr/local/mgr5/src/* и выполните следующие команды от имени пользователя *root*:
 
 ```sh
 # Перед первой компиляцией нужно установить сборочные зависимости и пакет с заголовочными файлами API
 make -f isp.mk centos-prepare
 yum install billmanager-devel
-# Забираем исходники
-git clone --recursive https://github.com/ardisru/billmgr5-pmrutlddomains.git pmrutlddomains
-# Если нужно, отредактируйте файл pmrutlddomains/config.mk c настройками проекта
-...
 # Устанавливаем модуль
+git clone --recursive https://github.com/ardisru/billmgr5-pmrutlddomains.git pmrutlddomains
 make -C pmrutlddomains install
 ```
-
-В файле *config.mk* находятся настройки проекта, этот файл нужно отредактировать перед установкой модуля.
-
-**Внимание:** если вы меняете значение переменной ***PM_NAME*** в *config.mk*, не забудьте переименовать директорию с исходниками модуля соответственно. Это необходимо для того, чтобы BILLmanager после обновления мог самостоятельно пересобрать и переустановить модуль. Именно поэтому исходники модуля должны лежать в */usr/local/mgr5/src/* и должны собираться от имени *root*. Для справки см. [официальную документацию](https://doc.ispsystem.ru/index.php/%D0%9E%D0%B1%D1%89%D0%B0%D1%8F_%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D1%8F_%D0%BF%D0%BE_%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B5_%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D0%B5%D0%B9).
