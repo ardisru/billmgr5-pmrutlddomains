@@ -12,5 +12,5 @@ make -f isp.mk centos-prepare
 yum install billmanager-devel
 # Устанавливаем модуль
 git clone --recursive https://github.com/ardisru/billmgr5-pmrutlddomains.git pmrutlddomains
-make -C pmrutlddomains install
+make -C pmrutlddomains all install
 ```
