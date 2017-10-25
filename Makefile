@@ -27,7 +27,7 @@ include $(BASE)/src/isp.mk
 
 all: $(DIST_XML) $(JSON)
 
-install: install-json
+install: $(DIST_XML) install-json
 
 install-json: $(JSON)
 	install -o root -g root -m 440 $(JSON) $(BASE)/etc/
