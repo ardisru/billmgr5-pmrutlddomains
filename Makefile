@@ -25,9 +25,9 @@ include $(BASE)/src/isp.mk
 .PHONY: install-json clean_json_xml dist_xml
 .SUFFIXES: .xml
 
-all: $(DIST_XML) $(JSON)
+all: $(JSON)
 
-install: $(DIST_XML) install-json
+install: install-json
 
 install-json: $(JSON)
 	install -o root -g root -m 440 $(JSON) $(BASE)/etc/
@@ -47,7 +47,7 @@ clean-generated:
 	$(RM) -r xml
 	$(RM) config.h
 
-processing.cpp: config.h
+processing.cpp: config.h $(DIST_XML)
 
 config.h: config.h.in $(CONFIG)
 	sed -e "s|__BINARY_NAME__|$(PM_NAME)|g" \
