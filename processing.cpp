@@ -812,7 +812,7 @@ class CLASS_NAME : public Registrator {
       }
 
       auto domain_edit =
-          Remote_MakeRequest({{"func", "domain.edit"}, {"elid", remote_id}});
+          Remote_MakeRequest({{"func", "domain.edit"}, {"elid", remote_id}, {"api", "on"}});
 
       int domain_id = str::Int(
           sbin::ClientQuery(
