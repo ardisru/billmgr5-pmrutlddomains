@@ -72,7 +72,7 @@ int GetJsonInt(const Json& item) {
   } else if (item.is_string()) {
     int rv = str::Int(item.string_value());
     if (str::Str(rv) != item.string_value()) {
-      throw mgr_err::Error("json_string_not_an_int");
+      throw mgr_err::Error("json_string_not_an_int: " + item.string_value());
     }
     return rv;
   } else {
@@ -82,6 +82,11 @@ int GetJsonInt(const Json& item) {
 
 int GetJsonInt(const Json& parent, const string& key) {
   return GetJsonInt(NotNull(parent, key));
+}
+
+int GetPriority(const Json &parent) {
+  auto item = NotNull(parent, "priority");
+  return (item.is_string() && item.string_value().size() == 0) ? 0 : GetJsonInt(item);
 }
 
 Json ReadJsonFromFile(const string& path) {
@@ -110,7 +115,7 @@ std::map<string, std::vector<DomainPrice>> GetTldPrices() {
     item.registrar_id = GetJsonInt(json_item, "registrar_id");
     g_enabled_registrars.insert(item.registrar_id);
     item.name = NotNull(json_item, "name").string_value();
-    item.priority = GetJsonInt(json_item, "priority");
+    item.priority = GetPriority(json_item);
     for (const auto& json_period : NotNull(json_item, "period").array_items()) {
       if (json_period["per_type"].string_value() != "year") {
         Warning("Skipping period type %s for price %d",
