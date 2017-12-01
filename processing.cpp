@@ -156,6 +156,8 @@ std::map<string, std::vector<DomainPrice>> GetTldPrices() {
   std::map<string, std::vector<DomainPrice>> tld_prices;
   for (const auto& item : items) {
     tld_prices[item.tld].push_back(item);
+    Debug("Pushing price tld=%s registrar_id=%d id=%d", item.tld.c_str(),
+      item.registrar_id, item.id);
   }
   return tld_prices;
 }
@@ -283,12 +285,15 @@ class CLASS_NAME : public Registrator {
 
   const DomainPrice& GetDomainPrice(int pricelist, const string& tld,
                                     int advise = -1) {
+    Debug("Request DomainPrice pricelist=%d tld=%s advice=%d", pricelist,
+      tld.c_str(), advise);
+    Debug("allowed_registrar=%d", allowed_registrar_);
     if (advise == -1 && allowed_registrar_ != -1) {
       return tld_prices_.at(tld).at(0);
     } else {
       for (const auto& i : tld_prices_.at(tld)) {
         if ((i.id == advise || advise == -1) &&
-            i.registrar_id == allowed_registrar_) {
+            (i.registrar_id == allowed_registrar_ || allowed_registrar_ == -1)) {
           return i;
         }
       }
@@ -537,6 +542,11 @@ class CLASS_NAME : public Registrator {
     url_ = m_module_data["url"];
     if (url_.empty()) {
       url_ = RUTLD_PROD_URL;
+    }
+
+    int registrar_id = str::Int(m_module_data["registrar"]);
+    if (registrar_id) {
+      allowed_registrar_ = registrar_id;
     }
 
     client_.reset(new mgr_client::Remote(url_));
