@@ -3,6 +3,7 @@
 #include <mgr/mgrlog.h>
 #include <mgr/mgrregex.h>
 #include <mgr/mgrrpc.h>
+#include <mgr/mgrstr.h>
 #include <processing/domain_common.h>
 #include <processing/processingmodule.h>
 #include <table/dbobject.h>
@@ -520,7 +521,7 @@ class CLASS_NAME : public Registrator {
     mgr_xml::Xml out;
     out.GetRoot().SetProp("ns", "require").SetProp("auth_code", "require");
 
-    const auto& tld_prices = tld_prices_.at(tld);
+    const auto& tld_prices = tld_prices_.at(str::puny::Decode(tld));
 
     if (tld_prices.at(0).is_ru) {
       out.GetRoot().AppendChild("contact_type", "owner").SetProp("main", "yes");
