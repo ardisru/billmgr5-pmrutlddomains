@@ -36,16 +36,23 @@
 #define RUTLD_PROD_NIC_REGISTRAR_ID 5
 #define RUTLD_PROD_ARDIS_REGISTRAR_ID 13
 
-// List of zones with one contact only.
-#define RUSSIAN_ZONES \
-  { "ru", "su", "рф", "ru.net", "москва", "moscow" }
-
 MODULE(BINARY_NAME);
 
 using namespace processing;
 using json11::Json;
 
 namespace {
+
+// List of zones with one contact only.
+const std::set<std::string> &RUSSIAN_ZONES() {
+  static std::set<std::string> zones;
+  if (zones.empty()) {
+    for (const auto &zone: { "ru", "su", "рф", "ru.net", "москва", "moscow" }) {
+      zones.insert(str::puny::Encode(zone));
+    }
+  }
+  return zones;
+}
 
 struct DomainPrice {
   string tld;
@@ -111,7 +118,7 @@ std::map<string, std::vector<DomainPrice>> GetTldPrices() {
   std::vector<DomainPrice> items;
   for (const auto& json_item : content.array_items()) {
     DomainPrice item;
-    item.tld = NotNull(json_item, "tld").string_value();
+    item.tld = str::puny::Encode(NotNull(json_item, "tld").string_value());
     item.id = GetJsonInt(json_item, "id");
     item.registrar_id = GetJsonInt(json_item, "registrar_id");
     g_enabled_registrars.insert(item.registrar_id);
@@ -133,7 +140,7 @@ std::map<string, std::vector<DomainPrice>> GetTldPrices() {
     if (item.registrar_id == RUTLD_PROD_NIC_REGISTRAR_ID) {
       item.is_nic = true;
     }
-    for (const auto& i : RUSSIAN_ZONES) {
+    for (const auto& i : RUSSIAN_ZONES()) {
       if (item.tld == i || str::EndsWith(item.tld, "." + string(i))) {
         item.is_ru = true;
       }
@@ -521,7 +528,7 @@ class CLASS_NAME : public Registrator {
     mgr_xml::Xml out;
     out.GetRoot().SetProp("ns", "require").SetProp("auth_code", "require");
 
-    const auto& tld_prices = tld_prices_.at(str::puny::Decode(tld));
+    const auto& tld_prices = tld_prices_.at(str::puny::Encode(tld));
 
     if (tld_prices.at(0).is_ru) {
       out.GetRoot().AppendChild("contact_type", "owner").SetProp("main", "yes");
@@ -855,7 +862,7 @@ class CLASS_NAME : public Registrator {
       if (domain_id == 0) throw mgr_err::Error("domain_import");
 
       std::set<string> required_contacts =
-          std::set<string>(RUSSIAN_ZONES).count(tld_name)
+          RUSSIAN_ZONES().count(tld_name)
               ? std::set<string>({"owner"})
               : std::set<string>({"owner", "admin", "bill", "tech"});
 
