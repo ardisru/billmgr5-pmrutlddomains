@@ -360,7 +360,7 @@ class CLASS_NAME : public Registrator {
     // Common fields for all types: location address, email, phone
     copy("email");
     request["phone"] = str::Replace(params.at("phone"), phone_replace_map);
-    request["fax"] = str::Replace(params.at("fax"), phone_replace_map);
+    //request["fax"] = str::Replace(params.at("fax"), phone_replace_map);
     request["la_country"] =
         GetRemoteCountryId(GetCountryIso2(params.at("location_country")));
     copy("la_state", "location_state");
