@@ -8,8 +8,8 @@
 
 ```sh
 # Перед первой компиляцией нужно установить сборочные зависимости и пакет с заголовочными файлами API
-make -f isp.mk centos-prepare
 yum install billmanager-devel
+make -f isp.mk centos-prepare
 # Устанавливаем модуль
 git clone --recursive https://github.com/ardisru/billmgr5-pmrutlddomains.git pmrutlddomains
 make -C pmrutlddomains all install
@@ -21,8 +21,8 @@ make -C pmrutlddomains all install
 
 ```sh
 # Перед первой компиляцией нужно установить сборочные зависимости и пакет с заголовочными файлами API
-make -f isp.mk debian-prepare
 apt-get install billmanager-devel
+make -f isp.mk debian-prepare
 # Устанавливаем модуль
 git clone --recursive https://github.com/ardisru/billmgr5-pmrutlddomains.git pmrutlddomains
 make -C pmrutlddomains all install
